@@ -195,6 +195,8 @@ export default function Home() {
     null
   );
   const [answerStartIndex, setAnswerStartIndex] = useState(0);
+  const [demoMode, setDemoMode] = useState(false);
+  const [demoStep, setDemoStep] = useState(0);
 
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const finalTranscriptRef = useRef("");
@@ -211,6 +213,7 @@ export default function Home() {
   const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const partialTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const answerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const demoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const listeningRef = useRef(false);
 
   const fillerCount = useMemo(() => {
@@ -605,6 +608,7 @@ export default function Home() {
     setQuestionLocked(false);
     setAnswerFeedback(null);
     setAnswerStartIndex(0);
+    setDemoStep(0);
   };
 
   const runDemoPrompt = (prompt: string) => {
@@ -616,24 +620,63 @@ export default function Home() {
     analyzeTranscript(prompt, prompt.length);
   };
 
+  const runDemoSequence = () => {
+    stopListening();
+    resetPractice();
+    setPracticeMode(true);
+    setDemoMode(true);
+    const prompt = DEMO_PROMPTS[demoStep % DEMO_PROMPTS.length];
+    runDemoPrompt(prompt);
+    demoTimeoutRef.current = setTimeout(() => {
+      const answer =
+        demoStep % 2 === 0
+          ? "Requirements: 10M DAU, low latency timelines, high write throughput. Architecture: API gateway, services, cache. Data model: users, tweets, timelines. Scaling: sharding, CDN, queues. Tradeoffs: consistency vs latency."
+          : "Situation: launched a feature that regressed performance. Task: fix quickly. Action: profiled queries, rolled back, added caching. Result: 45% latency reduction and better tests.";
+      finalTranscriptRef.current = `${prompt} ${answer}`;
+      setTranscript(finalTranscriptRef.current);
+      setAnswerStartIndex(prompt.length);
+      setQuestionLocked(true);
+      setDemoStep((prev) => prev + 1);
+      demoTimeoutRef.current = setTimeout(() => {
+        setDemoMode(false);
+      }, 1200);
+    }, 1600);
+  };
+
   useEffect(() => {
     return () => stopListening();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (demoTimeoutRef.current) {
+        clearTimeout(demoTimeoutRef.current);
+      }
+    };
   }, []);
 
   const coachTips = getCoachTips(analysis, fillerCount, inputLevel);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50">
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        <header className="flex flex-col gap-2">
+    <div className="relative min-h-screen overflow-hidden bg-zinc-950 text-zinc-50">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 right-[-10%] h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute left-[-15%] top-40 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
+        <div className="absolute bottom-[-10%] right-1/3 h-96 w-96 rounded-full bg-teal-500/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_60%)]" />
+      </div>
+      <main className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+        <header className="flex flex-col gap-3 rounded-3xl border border-zinc-800/70 bg-zinc-900/60 p-6 backdrop-blur">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-zinc-400">
                 VoiceStruct
               </p>
-              <h1 className="text-3xl font-semibold">Structured Thinking Coach</h1>
+              <h1 className="text-3xl font-semibold tracking-tight">
+                Structured Thinking Coach
+              </h1>
             </div>
-            <div className="rounded-full border border-zinc-800 px-3 py-1 text-xs text-zinc-400">
+            <div className="rounded-full border border-zinc-700/70 bg-zinc-950/60 px-3 py-1 text-xs text-zinc-300">
               Latency target: &lt; 1.5s
             </div>
           </div>
@@ -644,7 +687,7 @@ export default function Home() {
         </header>
 
         <section className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6">
+          <div className="rounded-3xl border border-zinc-800/70 bg-zinc-900/70 p-6 shadow-[0_0_30px_rgba(16,185,129,0.08)] backdrop-blur">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Live Transcript</h2>
               <div className="flex items-center gap-2 text-xs text-zinc-400">
@@ -673,19 +716,19 @@ export default function Home() {
                 Toggle {practiceMode ? "Open" : "Practice"} Mode
               </button>
             </div>
-            <div className="mt-4 min-h-[180px] rounded-xl border border-zinc-800 bg-zinc-950/60 p-4 text-sm text-zinc-200">
+            <div className="mt-4 min-h-[180px] rounded-2xl border border-zinc-800/70 bg-zinc-950/70 p-4 text-sm text-zinc-200 shadow-inner">
               {transcript || "Start speaking to see the transcript..."}
             </div>
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-300">
               <div className="flex flex-wrap items-center gap-3">
                 <button
-                  className="rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-emerald-400"
+                  className="rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold text-zinc-950 shadow-[0_0_16px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400"
                   onClick={startListening}
                 >
                   Start Listening
                 </button>
                 <button
-                  className="rounded-full border border-zinc-700 px-4 py-2 text-xs font-semibold text-zinc-200 transition hover:border-zinc-500"
+                  className="rounded-full border border-zinc-700/80 bg-zinc-950/60 px-4 py-2 text-xs font-semibold text-zinc-200 transition hover:border-zinc-500"
                   onClick={stopListening}
                 >
                   Stop
@@ -693,7 +736,7 @@ export default function Home() {
                 <label className="flex items-center gap-2 text-xs text-zinc-400">
                   Streaming mode
                   <select
-                    className="rounded-full border border-zinc-700 bg-zinc-900 px-3 py-1 text-xs text-zinc-200"
+                    className="rounded-full border border-zinc-700/80 bg-zinc-950 px-3 py-1 text-xs text-zinc-200"
                     value={streamMode}
                     onChange={(event) =>
                       setStreamMode(event.target.value as StreamMode)
@@ -730,9 +773,9 @@ export default function Home() {
                 <span>Input level</span>
                 <span>{inputLevel.toFixed(2)}</span>
               </div>
-              <div className="mt-2 h-2 w-full rounded-full bg-zinc-800">
+              <div className="mt-2 h-2 w-full rounded-full bg-zinc-800/80">
                 <div
-                  className="h-2 rounded-full bg-emerald-400 transition-all"
+                  className="h-2 rounded-full bg-emerald-400 transition-all shadow-[0_0_12px_rgba(16,185,129,0.45)]"
                   style={{ width: `${Math.min(1, inputLevel * 4) * 100}%` }}
                 />
               </div>
@@ -750,15 +793,24 @@ export default function Home() {
               Optional: set `NEXT_PUBLIC_SMALLEST_STREAM_MODE=pcm` (default) or
               `opus` depending on your Smallest settings.
             </p>
-            <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-950/60 p-3">
+            <div className="mt-4 rounded-2xl border border-zinc-800/70 bg-zinc-950/60 p-3">
               <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                 Demo prompts
               </p>
+              <div className="mt-2 flex items-center gap-2 text-xs text-zinc-400">
+                <button
+                  className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200 transition hover:border-emerald-300"
+                  onClick={runDemoSequence}
+                >
+                  {demoMode ? "Demo running..." : "Auto Demo (90s)"}
+                </button>
+                <span>Plays a question + sample answer flow.</span>
+              </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {DEMO_PROMPTS.map((prompt) => (
                   <button
                     key={prompt}
-                    className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-200 transition hover:border-emerald-400 hover:text-emerald-300"
+                    className="rounded-full border border-zinc-700/80 bg-zinc-950/70 px-3 py-1 text-xs text-zinc-200 transition hover:border-emerald-400 hover:text-emerald-300"
                     onClick={() => runDemoPrompt(prompt)}
                   >
                     {prompt}
@@ -781,7 +833,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6">
+            <div className="rounded-3xl border border-zinc-800/70 bg-zinc-900/70 p-6 backdrop-blur">
               <h2 className="text-lg font-semibold">Detected Question Type</h2>
               <p className="mt-3 text-2xl font-semibold text-emerald-300">
                 {analysis?.questionType ?? "Waiting for input"}
@@ -797,15 +849,15 @@ export default function Home() {
               <div className="mt-4 text-xs text-zinc-400">
                 Last analyzed sentence:
               </div>
-              <div className="mt-2 rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 text-sm text-zinc-200">
+              <div className="mt-2 rounded-2xl border border-zinc-800/70 bg-zinc-950/70 p-3 text-sm text-zinc-200 shadow-inner">
                 {lastAnalyzed || "No sentence analyzed yet."}
               </div>
               {practiceMode && (
-                <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 text-sm text-zinc-200">
+                <div className="mt-4 rounded-2xl border border-zinc-800/70 bg-zinc-950/60 p-3 text-sm text-zinc-200">
                   <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                     Practice flow
                   </p>
-                  <div className="mt-2 rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2 text-sm text-zinc-200">
+                  <div className="mt-2 rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 text-sm text-zinc-200 shadow-inner">
                     {questionText || "Waiting for a question..."}
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
@@ -837,10 +889,10 @@ export default function Home() {
               )}
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6">
+            <div className="rounded-3xl border border-zinc-800/70 bg-zinc-900/70 p-6 backdrop-blur">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Framework Generator</h2>
-                <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300">
+                <span className="rounded-full border border-zinc-700/80 bg-zinc-950/70 px-3 py-1 text-xs text-zinc-300">
                   {latencyMs ? `${latencyMs}ms` : "--"} latency
                 </span>
               </div>
@@ -853,7 +905,7 @@ export default function Home() {
                     {(analysis?.framework || []).map((item) => (
                       <span
                         key={item}
-                        className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200"
+                        className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200 shadow-[0_0_10px_rgba(16,185,129,0.25)]"
                       >
                         {item}
                       </span>
@@ -873,7 +925,7 @@ export default function Home() {
                     {(analysis?.outline || []).map((item) => (
                       <div
                         key={item}
-                        className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2"
+                        className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner"
                       >
                         {item}
                       </div>
@@ -888,13 +940,13 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6">
+            <div className="rounded-3xl border border-zinc-800/70 bg-zinc-900/70 p-6 backdrop-blur">
               <h2 className="text-lg font-semibold">Coach Guidance</h2>
               <div className="mt-4 space-y-3 text-sm text-zinc-200">
                 {coachTips.map((tip) => (
                   <div
                     key={tip.title}
-                    className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2"
+                    className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner"
                   >
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                       {tip.title}
@@ -906,21 +958,21 @@ export default function Home() {
             </div>
 
             {practiceMode && (
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6">
+              <div className="rounded-3xl border border-zinc-800/70 bg-zinc-900/70 p-6 backdrop-blur">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold">Answer Quality Feedback</h2>
-                  <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300">
+                  <span className="rounded-full border border-zinc-700/80 bg-zinc-950/70 px-3 py-1 text-xs text-zinc-300">
                     {answerFeedback
                       ? `${Math.round(answerFeedback.score * 100)}%`
                       : "--"}
                   </span>
                 </div>
                 <div className="mt-3 text-xs text-zinc-400">Answer transcript</div>
-                <div className="mt-2 rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 text-sm text-zinc-200">
+                <div className="mt-2 rounded-2xl border border-zinc-800/70 bg-zinc-950/70 p-3 text-sm text-zinc-200 shadow-inner">
                   {answerTranscript || "Answer will appear here."}
                 </div>
                 <div className="mt-4 grid gap-3 text-sm text-zinc-200">
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2">
+                  <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner">
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                       Missing components
                     </p>
@@ -930,7 +982,7 @@ export default function Home() {
                         : "—"}
                     </p>
                   </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2">
+                  <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner">
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                       Strengths
                     </p>
@@ -940,7 +992,7 @@ export default function Home() {
                         : "—"}
                     </p>
                   </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2">
+                  <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner">
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                       Suggested improvement
                     </p>
@@ -948,7 +1000,7 @@ export default function Home() {
                       {answerFeedback?.suggestion || "—"}
                     </p>
                   </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2">
+                  <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/70 px-3 py-2 shadow-inner">
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                       Filler summary
                     </p>

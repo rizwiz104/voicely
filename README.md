@@ -9,11 +9,15 @@ It listens to your question, classifies the type, and coaches your answer with f
 - Filler word counter, input level meter, and latency tracking
 - Demo prompts for rapid pitch mode
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+### 1) Install
+
+```bash
+npm install
+```
+
+### 2) Run
 
 ```bash
 npm run dev
@@ -25,13 +29,38 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to use the app.
+
+## Environment (optional)
+
+For Smallest streaming:
+
+```bash
+NEXT_PUBLIC_SMALLEST_WS_URL=wss://api.smallest.ai/stt/stream
+NEXT_PUBLIC_SMALLEST_STREAM_MODE=pcm # or opus
+```
+
+Optional mic boost for low input:
+
+```bash
+NEXT_PUBLIC_INPUT_GAIN=1.5
+```
+
+## Demo flow (quick)
+
+1. Click a demo prompt or ask a question.
+2. The question locks and the framework appears.
+3. Answer out loud and watch feedback update in real time.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Tech stack
+
+- Next.js (App Router)
+- Smallest.ai Streaming STT (optional)
+- Lightweight API routes for analysis + evaluation
 
 To learn more about Next.js, take a look at the following resources:
 
@@ -40,8 +69,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy on Vercel or any Node host. The app is client-heavy and runs well on free tiers.
