@@ -1,4 +1,4 @@
-VoiceStruct is a real-time structured thinking coach for mock interviews and high-pressure communication.
+Voicely is a real-time structured thinking coach for mock interviews and high-pressure communication.
 It listens to your question, classifies the type, and coaches your answer with frameworks, filler tracking, and feedback.
 
 ## What it does

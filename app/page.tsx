@@ -670,7 +670,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-zinc-400">
-                VoiceStruct
+                Voicely
               </p>
               <h1 className="text-3xl font-semibold tracking-tight">
                 Structured Thinking Coach
