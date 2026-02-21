@@ -1,3 +1,14 @@
+VoiceStruct is a real-time structured thinking coach for mock interviews and high-pressure communication.
+It listens to your question, classifies the type, and coaches your answer with frameworks, filler tracking, and feedback.
+
+## What it does
+
+- Real-time transcription via browser speech or Smallest streaming (PCM/Opus)
+- Instant question-type detection with structured frameworks
+- Practice mode flow: question → answer → quality feedback
+- Filler word counter, input level meter, and latency tracking
+- Demo prompts for rapid pitch mode
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
